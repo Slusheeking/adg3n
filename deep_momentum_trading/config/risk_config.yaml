@@ -1,0 +1,58 @@
+# Risk Management Configuration
+
+risk_manager:
+  enabled: true
+  log_level: "INFO"
+
+# Global Risk Limits
+global_limits:
+  max_portfolio_var: 0.015 # Maximum allowed Value at Risk (1.5%)
+  max_illiquid_percentage: 0.05 # Maximum 5% of portfolio value in illiquid assets
+  max_drawdown_percent: 0.02 # Maximum allowed drawdown (2% - much lower due to diversification)
+  daily_capital_limit: 50000.0 # $50K daily limit with dynamic reallocation
+  max_simultaneous_positions: 15000 # Support 10,000+ positions
+
+# Correlation Monitor Configuration
+correlation_monitor:
+  window_size: 60 # Lookback window for correlation calculation (e.g., 60 periods)
+  correlation_threshold: 0.85 # Threshold to flag highly correlated pairs (absolute value)
+
+# Liquidity Monitor Configuration
+liquidity_monitor:
+  min_daily_volume: 1000000 # Minimum daily trading volume for an asset to be considered liquid
+  max_bid_ask_spread_bps: 10.0 # Maximum allowed bid-ask spread in basis points (10 bps)
+
+# Portfolio Optimizer Configuration
+portfolio_optimizer:
+  risk_aversion: 1.2 # Balanced risk for high Sharpe ratio targets (4.0-8.0+)
+  target_sharpe_ratio: 6.0 # Target Sharpe ratio for optimization
+  enable_massive_diversification: true # Enable 10,000+ position optimization
+  position_concentration_limit: 0.005 # Max 0.5% per position for diversification
+
+# VaR Calculator Configuration
+var_calculator:
+  confidence_levels: [0.95, 0.99, 0.999]
+  lookback_periods: [252, 504, 1008]
+  monte_carlo_simulations: 100000
+  bootstrap_samples: 10000
+  enable_arm64_optimizations: true
+  use_shared_memory: true
+  cache_size: 1000
+  parallel_processing: true
+  max_workers: null
+  distribution_models: ['normal', 't', 'skewed_t']
+  backtesting_window: 252
+  component_var_threshold: 0.01
+
+# Stress Testing Configuration
+stress_testing:
+  enabled: true
+  scenarios:
+    - market_crash
+    - liquidity_crisis
+    - sector_specific_shock
+
+# ZMQ Communication Ports (for Risk Manager)
+zmq_ports:
+  predictions_subscriber: 5557 # RiskManager subscribes to model predictions
+  risk_approved_predictions_publisher: 5558 # RiskManager publishes risk-approved predictions

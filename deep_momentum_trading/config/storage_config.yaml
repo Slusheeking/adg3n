@@ -1,0 +1,53 @@
+# Storage Configuration for Deep Momentum Trading System
+
+# SQLite Storage Configuration
+sqlite:
+  use_arm64_optimizations: true
+  journal_mode: "WAL"  # WAL, DELETE, TRUNCATE, PERSIST, MEMORY, OFF
+  synchronous: "NORMAL"  # OFF, NORMAL, FULL, EXTRA
+  cache_size: -64000  # Negative means KB, positive means pages
+  temp_store: "MEMORY"  # DEFAULT, FILE, MEMORY
+  mmap_size: 268435456  # 256MB
+  page_size: 4096
+  auto_vacuum: "INCREMENTAL"  # NONE, FULL, INCREMENTAL
+  wal_autocheckpoint: 1000
+  busy_timeout: 30000  # 30 seconds
+  enable_fts: true  # Full-text search
+  enable_rtree: true  # R-tree spatial index
+  connection_pool_size: 10
+  enable_connection_pooling: true
+  enable_prepared_statements: true
+  enable_batch_operations: true
+  batch_size: 1000
+
+# Storage Paths
+paths:
+  trading_history_db: "data/storage/trading_history.db"
+  market_data_db: "data/storage/market_data.db"
+  performance_metrics_db: "data/storage/performance_metrics.db"
+  
+# HDF5 Storage Configuration
+hdf5:
+  use_arm64_optimizations: true
+  compression: "lz4"
+  chunk_cache_size: 1073741824  # 1GB
+  enable_swmr: true
+  fletcher32: true
+  shuffle: true
+  track_order: false
+
+# Parquet Storage Configuration  
+parquet:
+  use_arm64_optimizations: true
+  compression: "snappy"
+  row_group_size: 100000
+  enable_statistics: true
+  use_dictionary: true
+
+# Memory Storage Configuration
+memory:
+  use_arm64_optimizations: true
+  max_memory_usage: 8589934592  # 8GB
+  enable_compression: true
+  eviction_policy: "lru"
+  persistence_enabled: true

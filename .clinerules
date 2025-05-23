@@ -1,0 +1,39 @@
+# Default Cline Rules for Deep Momentum Trading Project
+
+# Memory Bank Integration
+memory_bank:
+  enabled: true
+  directory: "memory-bank/"
+  auto_update: true
+  context_preservation: true
+
+# Project Structure
+project_root: "/workspaces/adg3n"
+main_directories:
+  - "deep_momentum_trading/"
+  - "memory-bank/"
+
+# File Access Patterns
+allowed_patterns:
+  - "**/*.py"
+  - "**/*.yaml"
+  - "**/*.yml"
+  - "**/*.md"
+  - "**/*.txt"
+  - "**/*.json"
+  - "**/*.cfg"
+  - "**/*.ini"
+
+# Development Workflow
+development:
+  test_before_commit: true
+  maintain_documentation: true
+  preserve_context: true
+  track_decisions: true
+
+# Code Quality Standards
+code_quality:
+  enforce_type_hints: true
+  require_docstrings: true
+  maintain_test_coverage: true
+  follow_pep8: true

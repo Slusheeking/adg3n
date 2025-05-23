@@ -1,0 +1,294 @@
+# Deep Momentum Trading System - Training Configuration
+# Production-ready training configuration with ARM64 optimizations
+
+# Hardware Configuration
+hardware:
+  device_type: "cuda"  # cuda, cpu, mps
+  num_gpus: 4
+  gpu_memory_fraction: 0.8
+  cpu_threads: 32
+
+# ARM64 Optimizations
+arm64:
+  enabled: true
+  optimization_level: "aggressive"  # conservative, moderate, aggressive
+  use_cuda_graphs: true
+  use_mixed_precision: true
+  use_torchscript: true
+  memory_pool_size_gb: 16
+  prefetch_factor: 4
+
+# Model Registry
+model_registry:
+  path: "deep_momentum_trading/data/models/model_registry.json"
+  backup_path: "deep_momentum_trading/data/models/backups/"
+  auto_backup: true
+  max_versions: 10
+
+# Database Configuration
+database:
+  training_db_path: "deep_momentum_trading/data/storage/training_history.db"
+  connection_pool_size: 10
+  wal_mode: true
+  synchronous: "NORMAL"
+  cache_size_mb: 256
+
+# Communication (ZeroMQ)
+communication:
+  zmq:
+    data_port: 5555
+    features_port: 5556
+    training_signals_port: 5557
+    monitoring_port: 5558
+    system_events_port: 5559
+    high_water_mark: 10000
+    linger_ms: 1000
+    tcp_keepalive: true
+    compression: "lz4"  # none, lz4, zstd
+
+# Data Configuration
+data:
+  symbols: ["AAPL", "MSFT", "GOOGL", "AMZN", "TSLA", "META", "NVDA", "JPM", "JNJ", "V"]
+  hdf5_path: "deep_momentum_trading/data/raw/polygon/market_data.h5"
+  memory_cache_gb: 32
+  sequence_length: 60
+  prediction_horizon: 1
+  validation_split: 0.2
+  test_split: 0.1
+  batch_size: 64
+  num_workers: 8
+  pin_memory: true
+  prefetch_factor: 2
+  
+  # Polygon.io Configuration
+  polygon:
+    api_key: null  # Set via POLYGON_API_KEY environment variable
+    enable_second_data: true
+    enable_subsecond_data: true
+    max_reconnect_attempts: 10
+    reconnect_delay: 1.0
+    rate_limit_per_minute: 5000
+    buffer_size: 10000
+    enable_data_validation: true
+    enable_latency_tracking: true
+    websocket_timeout: 30.0
+    rest_timeout: 30.0
+    enable_compression: true
+    enable_batching: true
+    batch_size: 100
+  
+  # Real-time data settings
+  real_time:
+    enabled: true
+    buffer_size: 10000
+    update_frequency_ms: 100
+    quality_checks: true
+
+# Training Configuration
+training:
+  # Basic settings
+  epochs: 100
+  early_stopping_patience: 10
+  gradient_clip_value: 1.0
+  log_interval: 100
+  save_interval: 1000
+  validation_interval: 500
+  
+  # Optimization
+  optimizer:
+    type: "AdamW"
+    lr: 0.001
+    weight_decay: 0.01
+    betas: [0.9, 0.999]
+    eps: 1e-8
+  
+  scheduler:
+    type: "CosineAnnealingWarmRestarts"
+    T_0: 10
+    T_mult: 2
+    eta_min: 1e-6
+    warmup_epochs: 5
+  
+  # Loss function
+  loss:
+    type: "CombinedLoss"
+    sharpe_weight: 1.0
+    turnover_weight: 0.05
+    risk_weight: 0.1
+    
+  # Regularization
+  regularization:
+    dropout: 0.1
+    label_smoothing: 0.1
+    mixup_alpha: 0.2
+    cutmix_alpha: 1.0
+  
+  # Distributed training
+  distributed:
+    enabled: false
+    backend: "nccl"
+    world_size: 4
+    find_unused_parameters: false
+    gradient_as_bucket_view: true
+    
+  # Advanced techniques
+  advanced:
+    curriculum_learning: true
+    meta_learning: false
+    online_learning: true
+    continual_learning: false
+    knowledge_distillation: false
+
+# Model Configurations
+models:
+  configurations:
+    - model_type: "deep_momentum_lstm"
+      variant: "base"
+      parameters:
+        input_size: 200
+        hidden_size: 512
+        num_layers: 3
+        dropout: 0.1
+        bidirectional: false
+      training_params:
+        epochs: 50
+        batch_size: 64
+        
+    - model_type: "transformer_momentum"
+      variant: "base"
+      parameters:
+        input_size: 200
+        d_model: 512
+        nhead: 8
+        num_layers: 6
+        dropout: 0.1
+      training_params:
+        epochs: 75
+        batch_size: 32
+        
+    - model_type: "ensemble_system"
+      variant: "multi_model"
+      parameters:
+        base_models: ["deep_momentum_lstm", "transformer_momentum"]
+        ensemble_method: "weighted_average"
+        num_base_models: 5
+      training_params:
+        epochs: 25
+        batch_size: 32
+
+# Hyperparameter Tuning
+hyperparameter_tuning:
+  enabled: true
+  framework: "optuna"
+  n_trials: 100
+  timeout_hours: 24
+  direction: "maximize"  # maximize sharpe_ratio
+  
+  search_space:
+    hidden_size: [256, 512, 1024]
+    num_layers: [2, 3, 4, 5]
+    dropout: [0.05, 0.1, 0.15, 0.2]
+    learning_rate: [1e-5, 1e-3]
+    batch_size: [32, 64, 128]
+    
+  pruning:
+    enabled: true
+    min_trials: 10
+    patience: 5
+
+# Validation and Testing
+validation:
+  metrics:
+    - "sharpe_ratio"
+    - "calmar_ratio"
+    - "sortino_ratio"
+    - "max_drawdown"
+    - "volatility"
+    - "information_ratio"
+  
+  walk_forward:
+    enabled: true
+    window_size_days: 252  # 1 year
+    step_size_days: 63     # 1 quarter
+    min_train_size_days: 504  # 2 years
+    
+  cross_validation:
+    enabled: false
+    n_folds: 5
+    time_series_split: true
+
+# Monitoring and Logging
+monitoring:
+  enabled: true
+  metrics_interval_seconds: 30
+  system_metrics: true
+  model_metrics: true
+  training_metrics: true
+  
+  alerts:
+    enabled: true
+    memory_threshold_percent: 90
+    gpu_memory_threshold_percent: 95
+    loss_divergence_threshold: 10.0
+    
+  visualization:
+    enabled: true
+    update_interval_seconds: 60
+    save_plots: true
+    plot_directory: "deep_momentum_trading/data/plots/"
+
+# Deployment
+deployment:
+  auto_deploy: false
+  production_path: "deep_momentum_trading/data/models/production/"
+  staging_path: "deep_momentum_trading/data/models/staging/"
+  
+  validation_requirements:
+    min_sharpe_ratio: 1.5
+    max_drawdown_threshold: 0.15
+    min_validation_samples: 1000
+    
+  rollback:
+    enabled: true
+    performance_threshold: 0.9  # 90% of previous performance
+    monitoring_period_hours: 24
+
+# Logging
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "deep_momentum_trading/logs/training.log"
+  max_file_size_mb: 100
+  backup_count: 5
+  
+  # Component-specific logging
+  components:
+    training: "INFO"
+    data: "INFO"
+    models: "INFO"
+    communication: "WARNING"
+    database: "INFO"
+
+# Resource Management
+resources:
+  memory:
+    max_memory_gb: 64
+    swap_threshold_percent: 80
+    garbage_collection_interval: 1000
+    
+  compute:
+    max_cpu_percent: 90
+    max_gpu_percent: 95
+    thermal_throttle_temp: 85
+    
+  storage:
+    max_disk_usage_percent: 85
+    cleanup_old_checkpoints: true
+    checkpoint_retention_days: 30
+
+# Experimental Features
+experimental:
+  federated_learning: false
+  quantum_optimization: false
+  neuromorphic_computing: false
+  edge_deployment: false

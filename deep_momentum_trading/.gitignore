@@ -1,0 +1,471 @@
+# Deep Momentum Trading System - .gitignore
+
+# ==============================================================================
+# Python
+# ==============================================================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Flask stuff
+instance/
+.webassets-cache
+
+# Scrapy stuff
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# poetry
+poetry.lock
+
+# pdm
+.pdm.toml
+
+# PEP 582
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# SageMath parsed files
+*.sage.py
+
+# Environments
+# NOTE: .env file is intentionally NOT ignored - it should be tracked
+# .env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# PyCharm
+.idea/
+
+# ==============================================================================
+# Data and Storage
+# ==============================================================================
+# Raw market data (too large for git)
+data/raw/polygon/
+data/raw/cache/
+*.h5
+*.hdf5
+*.parquet
+
+# Processed features and labels (regenerated)
+data/processed/features/
+data/processed/labels/
+data/processed/metadata/
+
+# Model checkpoints and experiments (too large)
+data/models/checkpoints/
+data/models/experiments/
+*.pkl
+*.joblib
+*.ckpt
+*.pt
+*.pth
+
+# Keep production models in git but ignore large checkpoint files
+data/models/production/*.pt
+data/models/production/*.pth
+data/models/production/*.ckpt
+!data/models/production/model_registry.json
+!data/models/production/README.md
+
+# Database files (contain sensitive data)
+data/storage/*.db
+data/storage/*.db-journal
+data/storage/*.db-wal
+data/storage/*.db-shm
+
+# Backtest results and reports (regenerated)
+data/backtest/results/
+data/backtest/reports/
+
+# ==============================================================================
+# Logs
+# ==============================================================================
+logs/
+*.log
+*.log.*
+*.out
+
+# ==============================================================================
+# Temporary and Cache Files
+# ==============================================================================
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# ==============================================================================
+# IDE and Editor Files
+# ==============================================================================
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.atom/
+
+# ==============================================================================
+# Operating System Files
+# ==============================================================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ==============================================================================
+# Trading System Specific
+# ==============================================================================
+# API Keys and Secrets (stored in .env which IS tracked)
+# Sensitive configuration files
+config/*_production.yaml
+config/*_staging.yaml
+config/secrets/
+
+# Trading history with real money (if any)
+data/storage/live_trading.db
+data/storage/real_trading_history.db
+
+# Performance monitoring data (regenerated)
+monitoring/data/
+monitoring/plots/
+monitoring/alerts/generated/
+
+# ARM64 compiled binaries and optimizations
+*.so
+*.dylib
+*.dll
+arm64_optimizations/compiled/
+
+# TorchScript compiled models
+*.torchscript
+*.traced
+
+# CUDA cache and compiled kernels
+.nv_cache/
+*.cubin
+*.fatbin
+
+# Distributed training temporary files
+dist_training_temp/
+torch_distributed_*/
+
+# ==============================================================================
+# Development and Testing
+# ==============================================================================
+# Test artifacts
+.coverage
+htmlcov/
+.pytest_cache/
+test_results/
+test_data/generated/
+
+# Temporary notebooks for experimentation
+notebooks/scratch/
+notebooks/experiments/
+notebooks/temp_*.ipynb
+
+# Development scripts and utilities
+scripts/dev/
+scripts/temp/
+scripts/personal/
+
+# Local development configuration
+.local/
+local_config/
+
+# ==============================================================================
+# Documentation and Plots
+# ==============================================================================
+# Generated documentation
+docs/build/
+docs/generated/
+
+# Generated plots and figures (recreated)
+plots/
+figures/
+*.png
+*.jpg
+*.jpeg
+*.pdf
+!docs/images/
+!README_images/
+
+# ==============================================================================
+# External Tools and Dependencies
+# ==============================================================================
+# Node modules (if using any JS tools)
+node_modules/
+
+# R files (if any)
+.Rhistory
+.RData
+.Ruserdata
+
+# MATLAB files
+*.asv
+*.m~
+
+# ==============================================================================
+# Monitoring and Alerts
+# ==============================================================================
+# Generated alert files
+monitoring/alerts/generated_alerts.json
+monitoring/alerts/email_queue/
+
+# Dashboard cache
+monitoring/dashboards/cache/
+
+# ==============================================================================
+# Deployment and Production
+# ==============================================================================
+# Docker
+.dockerignore
+
+# Kubernetes
+k8s/secrets/
+k8s/generated/
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# ==============================================================================
+# Keep Important Files (Explicit Includes)
+# ==============================================================================
+# These files should always be tracked
+!.env
+!config/*.yaml
+!config/*.yml
+!requirements.txt
+!setup.py
+!CLAUDE.md
+!README.md
+!LICENSE
+!.gitignore
+
+# Keep empty directories with .gitkeep
+!**/.gitkeep
+
+# Keep example configuration files
+!config/examples/
+!config/templates/
+
+# Keep model registry and metadata
+!data/models/model_registry.json
+!data/models/*/metadata.json
+
+# Keep essential documentation
+!docs/architecture/
+!docs/README.md
+
+# Keep essential test fixtures
+!tests/fixtures/
+!tests/conftest.py
+
+# ==============================================================================
+# Performance and Optimization
+# ==============================================================================
+# Profiling results
+*.prof
+*.cprof
+*.pstats
+profiling_results/
+
+# Memory dumps
+*.dmp
+*.dump
+memory_dumps/
+
+# Performance benchmarks (keep configs, ignore results)
+benchmarks/results/
+!benchmarks/configs/
+
+# ==============================================================================
+# Security
+# ==============================================================================
+# Private keys and certificates
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+secrets/
+private/
+
+# But keep public certificates and example keys
+!certs/public/
+!examples/keys/
+
+# ==============================================================================
+# Miscellaneous
+# ==============================================================================
+# Backup files
+*.bak
+*.backup
+*_backup.*
+
+# Archive files
+*.zip
+*.tar
+*.tar.gz
+*.tar.bz2
+*.7z
+*.rar
+
+# Large data files that should be stored externally
+*.csv.gz
+large_datasets/
+
+# Temporary pip files
+pip-selfcheck.json
+
+# PyTorch Hub cache
+torch/hub/
+
+# Weights & Biases
+wandb/
+
+# MLflow
+mlruns/
+mlartifacts/
+
+# TensorBoard logs
+runs/
+logs/tensorboard/

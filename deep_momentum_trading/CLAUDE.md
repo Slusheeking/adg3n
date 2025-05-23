@@ -1,0 +1,4 @@
+- @system deep_momentum_trading/docs/architecture/system_design.md
+- @docs deep_momentum_trading/docs/architecture/data_flow.md
+- @storage deep_momentum_trading/docs/architecture/storage_architecture.md
+- @communication deep_momentum_trading/src/communication/

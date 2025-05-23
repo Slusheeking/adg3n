@@ -1,0 +1,67 @@
+# Trading Engine Configuration
+
+trading_engine:
+  enabled: true
+  mode: "live" # Options: "live", "paper", "backtest"
+  strategy_name: "deep_momentum_trading_v1"
+  log_level: "INFO"
+
+# Alpaca API Configuration
+alpaca:
+  api_key: null  # Set via ALPACA_API_KEY environment variable
+  secret_key: null  # Set via ALPACA_SECRET_KEY environment variable
+  base_url: "https://paper-api.alpaca.markets"  # Use paper trading for development/testing
+  data_url: "https://data.alpaca.markets"
+  paper_trading: true
+  max_retries: 3
+  retry_delay: 1.0
+  rate_limit_requests: 200
+  rate_limit_window: 60
+  connection_timeout: 30.0
+  read_timeout: 30.0
+  enable_caching: true
+  cache_ttl: 300  # 5 minutes
+  enable_arm64_optimizations: true
+  enable_performance_monitoring: true
+  enable_validation: true
+
+# Order Management Configuration
+order_management:
+  default_order_type: "market"
+  default_time_in_force: "day"
+  min_trade_threshold: 0.01 # Minimum quantity difference to generate an order
+
+# Position Management Configuration
+position_management:
+  daily_capital_limit: 50000.0 # $50K daily limit - can continue trading when stocks sold
+  initial_cash: 50000.0 # Starting cash for paper/backtest mode
+  max_position_size_percent: 0.005 # Max 0.5% per position (enables 10,000+ positions)
+  min_position_value: 5.0 # Minimum $5 per position
+  max_simultaneous_positions: 15000 # Support 10,000+ positions with buffer
+  max_total_exposure_percent: 1.0 # Max 100% of available capital exposed
+  enable_dynamic_reallocation: true # Continue trading when positions are sold
+  rebalance_frequency_seconds: 30 # Real-time capital reallocation
+  
+# Performance Targets
+performance_targets:
+  daily_return_min: 0.03 # 3.0% minimum daily return target
+  daily_return_max: 0.06 # 6.0% maximum daily return target
+  sharpe_ratio_min: 4.0 # Minimum Sharpe ratio target
+  sharpe_ratio_max: 8.0 # Maximum Sharpe ratio target
+  max_drawdown: 0.02 # Maximum 2% drawdown (much lower due to diversification)
+  target_win_rate: 0.65 # 65% win rate through superior pattern recognition
+
+# ZMQ Communication Ports
+zmq_ports:
+  risk_manager_subscriber: 5558 # TradingEngine subscribes to risk manager
+  execution_results_publisher: 5559 # ExecutionEngine publishes results
+
+# Trade Logging Configuration
+trade_logging:
+  database_path: "data/storage/trading_history.db"
+  enable_detailed_logging: true
+
+# Performance Monitoring
+performance_monitoring:
+  enable: true
+  metrics_interval_seconds: 60 # Log performance metrics every 60 seconds

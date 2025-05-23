@@ -1,0 +1,174 @@
+# deep_momentum_trading/config/model_config.yaml
+
+# This file defines the configurations for various deep learning models
+# used in the Deep Momentum Trading system. These configurations are
+# loaded by the ModelRegistry to instantiate and manage models.
+
+# Each top-level key represents a model name, and its value is a dictionary
+# corresponding to the ModelConfig dataclass.
+
+models:
+  # LSTM Models
+  lstm_small:
+    model_type: deep_momentum_lstm
+    parameters:
+      input_size: 200
+      hidden_size: 256
+      num_layers: 4
+      dropout: 0.2
+    description: "Small LSTM for fast inference"
+    version: "1.0"
+    tags: ["small", "fast", "lstm"]
+
+  lstm_medium:
+    model_type: deep_momentum_lstm
+    parameters:
+      input_size: 200
+      hidden_size: 512
+      num_layers: 8
+      dropout: 0.2
+    description: "Medium LSTM balancing performance and speed"
+    version: "1.0"
+    tags: ["medium", "balanced", "lstm"]
+
+  lstm_large:
+    model_type: deep_momentum_lstm
+    parameters:
+      input_size: 200
+      hidden_size: 1024
+      num_layers: 12
+      dropout: 0.3
+    description: "Large LSTM for maximum performance"
+    version: "1.0"
+    tags: ["large", "performance", "lstm"]
+
+  # Transformer Models
+  transformer_small:
+    model_type: transformer_momentum
+    parameters:
+      input_size: 200
+      d_model: 512
+      num_heads: 8
+      num_layers: 6
+      dropout: 0.1
+    description: "Small Transformer for cross-asset attention"
+    version: "1.0"
+    tags: ["small", "transformer", "attention"]
+
+  transformer_large:
+    model_type: transformer_momentum
+    parameters:
+      input_size: 200
+      d_model: 1024
+      num_heads: 16
+      num_layers: 12
+      dropout: 0.1
+    description: "Large Transformer for complex patterns"
+    version: "1.0"
+    tags: ["large", "transformer", "complex"]
+
+  # Ensemble Models
+  # The 'model_configs' parameter within the ensemble's parameters should reference
+  # the names of other models defined in this same YAML file.
+  # The ConfigurationManager will handle loading these nested configurations.
+  ensemble_mixed_adaptive:
+    model_type: ensemble_momentum
+    parameters:
+      # These keys should match the top-level model names defined above
+      model_configs:
+        lstm_small:
+          model_type: deep_momentum_lstm
+          parameters:
+            input_size: 200
+            hidden_size: 256
+            num_layers: 4
+            dropout: 0.2
+        transformer_small:
+          model_type: transformer_momentum
+          parameters:
+            input_size: 200
+            d_model: 512
+            num_heads: 8
+            num_layers: 6
+            dropout: 0.1
+      ensemble_method: adaptive_meta_learning
+      performance_tracking: True
+      market_feature_dim: 50 # Example value, adjust as needed
+      
+      # Massive Diversification Configuration
+      target_ensemble_size: 50  # 50+ ensemble members
+      confidence_threshold: 0.6
+      model_diversity_threshold: 0.3
+      
+      # Performance Targets (from requirements)
+      target_sharpe_ratio: 6.0
+      target_daily_return_min: 0.03  # 3.0%
+      target_daily_return_max: 0.06  # 6.0%
+      max_drawdown_threshold: 0.02   # 2% max drawdown
+      target_win_rate: 0.65          # 65% win rate
+      target_positions: 10000        # 10,000+ simultaneous positions
+      
+    description: "Mixed ensemble with LSTM and Transformer models, using adaptive meta-learning for massive diversification."
+    version: "2.0"
+    tags: ["ensemble", "mixed", "adaptive", "meta-learning", "massive-diversification"]
+
+# Global Performance Configuration
+performance_targets:
+  # Daily Performance Requirements
+  daily_return_min: 0.03    # 3.0% minimum daily return
+  daily_return_max: 0.06    # 6.0% maximum daily return target
+  sharpe_ratio_min: 4.0     # 4.0+ Sharpe ratio minimum
+  sharpe_ratio_max: 8.0     # 8.0+ Sharpe ratio target
+  max_drawdown: 0.02        # 2% maximum drawdown (much lower due to diversification)
+  
+  # Position Management
+  target_positions: 10000   # 10,000+ simultaneous positions
+  daily_capital_limit: 50000.0  # $50K daily limit
+  min_position_value: 5.0   # $5 minimum per position
+  max_position_concentration: 0.005  # 0.5% max per position
+  
+  # Strategy Performance
+  target_win_rate: 0.65     # 65% win rate through superior pattern recognition
+  consistency_threshold: 0.9  # 90% consistency in meeting targets
+  
+# Feature Engineering for Massive Diversification
+feature_engineering:
+  # Support 10,000+ engineered features
+  max_features: 15000
+  feature_selection_method: "mutual_information"
+  feature_importance_threshold: 0.001
+  
+  # Technical Indicators
+  technical_indicators:
+    - rsi
+    - macd
+    - bollinger_bands
+    - moving_averages
+    - volume_indicators
+    - momentum_indicators
+    - volatility_indicators
+    - trend_indicators
+    - support_resistance
+    - fibonacci_levels
+    
+  # Cross-asset and market features
+  cross_asset_features: true
+  sector_features: true
+  market_regime_features: true
+  correlation_features: true
+  
+  # Lookback periods for comprehensive analysis
+  lookback_periods: [5, 10, 15, 20, 30, 50, 100, 200]
+  
+# ARM64 GH200 Optimizations
+arm64_optimizations:
+  enable_torchscript: true
+  enable_cuda_graphs: true
+  use_mixed_precision: true
+  memory_format: "channels_last"
+  unified_memory_optimization: true
+  
+  # Performance targets for ARM64
+  target_inference_latency_ms: 1.0  # <1ms inference
+  target_throughput_per_sec: 50000  # 50K predictions/sec
+  memory_efficiency_target: 0.85    # 85% memory utilization
